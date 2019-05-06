@@ -31,7 +31,7 @@ def bringDataFromArchive(nameOfArchive):
 		res.append([labels[i],features[i]])
 	return res
 
-def createFeatureVector (positive, negative, size=0.2):
+def createFeatureVector (positive, negative,negt,post, size=0.2):
 	dataToProcess = []
 	dataToTest = []
 	auxP = bringDataFromArchive(positive)
@@ -44,14 +44,14 @@ def createFeatureVector (positive, negative, size=0.2):
 	
 	
 	
-	dataToTest += bringDataFromArchive("./database/Test_Negative_Sample_S9_2_9_1_HMM.sample")
+	dataToTest += bringDataFromArchive(negt)
 	dataToTest = dataToTest[int(len(dataToTest)*0.999) : ]
-	c = bringDataFromArchive("./database/Test_Positive_Sample_S9_2_9_HMM.sample")
+	c = bringDataFromArchive(post)
 
 	total = len(c)+len(dataToTest)
 	print(len(c)/total)
 
-	dataToTest += bringDataFromArchive("./database/Test_Positive_Sample_S9_2_9_HMM.sample")
+	dataToTest += bringDataFromArchive(post)
 	
 
 	
@@ -100,7 +100,7 @@ def createFeatureVector (positive, negative, size=0.2):
 	return trainX,trainY,testX,testY,ValX,ValY
 
 
-trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S9_2_9_HMM.sample','./database/Train_Negative_Sample_S9_2_9_1_HMM.sample')
+#trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S9_2_9_HMM.sample','./database/Train_Negative_Sample_S9_2_9_1_HMM.sample')
 #print(trainy)
 #print(testy)
 #with open('aut_seq_pickle.pickle','wb') as f:
