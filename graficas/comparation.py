@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-acc = [95.74074074]
-prec = [95.92105263]
-recall = [88.88888889]
-spec = [99.16666667]
-MCC = [83.58305674]
-F1 = [92.26967089]
+					
+acc = [93.75]
+prec = [94.11764706]
+recall = [92.30769231]
+spec = [100]
+MCC = [67.30769231]
+F1 = [93.2038835]
 
 																											
 									
@@ -18,21 +18,21 @@ first = ax.scatter(y,g, label='LSTM')
 
 					
 
-									
+												
 																										
-acc = [93.75]
-prec = [94.17101081]
-recall = [91.42857143]
-spec = [95]
-MCC = [86.84848967]
-F1 = [92.77952983]
+acc = [97.61904762]
+prec = [97.6744186]
+recall = [100]
+spec = [96.55172414]
+MCC = [100]
+F1 = [	98.82352941	]
 
 g = [acc,prec,recall,spec,MCC,F1]
 y = ["acc","prec","recall","spec","MCC","F1"]
 first = ax.scatter(y,g, label='CNN')
 
 ax.set_ylabel('Resultados en porcentaje')
-ax.set_title('Sitio de clivaje 1')
+ax.set_title('Sitio de clivaje 6')
 
 ax.legend()
 
