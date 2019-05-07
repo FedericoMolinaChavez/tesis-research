@@ -14,16 +14,18 @@ sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
 
-trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S2_6_5_HMM.sample','./database/Train_Negative_Sample_S2_6_5_1_HMM.sample')
+trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S2_6_5_HMM.sample','./database/Train_Negative_Sample_S2_6_5_1_HMM.sample', './database/Test_Positive_Sample_S2_6_5_HMM.sample', './database/Test_Negative_Sample_S2_6_5_1_HMM.sample')
 
 print(trainx.shape)
 model = Sequential()
 model.add(Embedding(30, 128, input_length = trainx.shape[1]))
-model.add(LSTM(200, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
-model.add(LSTM(200, dropout = 0.2, recurrent_dropout=0.3, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
+model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
+model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
+model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
+model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
 model.add(Dense(2,activation='softmax', bias_initializer='RandomNormal'))
-optimizerx = optimizers.Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
-model.compile(loss = 'categorical_crossentropy', optimizer = optimizerx,metrics=['accuracy'])
+optimizerx = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+model.compile(loss = 'poisson', optimizer = optimizerx,metrics=['accuracy'])
 print(model.summary())
 model.fit(trainx,trainy, batch_size=32, epochs=15,verbose=5)
 
