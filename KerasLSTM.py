@@ -27,7 +27,7 @@ model.add(Dense(2,activation='softmax', bias_initializer='RandomNormal'))
 optimizerx = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 model.compile(loss = 'poisson', optimizer = optimizerx,metrics=['accuracy'])
 print(model.summary())
-model.fit(trainx,trainy, batch_size=32, epochs=15,verbose=5)
+model.fit(trainx,trainy, batch_size=32, epochs=1000,verbose=5)
 
 model_json = model.to_json()
 with open("models/model2.json","w") as json_file:

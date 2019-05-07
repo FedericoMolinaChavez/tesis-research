@@ -1,6 +1,6 @@
 from Bio import SeqIO
 import numpy as np
-
+import os 
 
 #print("something")
 
@@ -9,6 +9,10 @@ class sequenceReaderDecoder():
         self.filePath = filePath
         self.fileDestiny = fileDestiny
         self.aminoacids = {"G" : 0 ,"P" : 1,"A" : 2,"V" : 3,"L" : 4,"I" : 5,"M" : 6,"C" : 7,"F" : 8,"Y" : 9,"W" : 10,"H" : 11,"K" : 12,"R" : 13,"Q" : 14,"N" : 15,"E" : 16,"D" : 17,"S" : 18,"T" : 19}
+    def setFilePath(self, filepath):
+        self.filePath = filepath
+    def setFileDestiny(self, filepath):
+        self.filePath = filepath
     def ReadBioSeqAndTransformToTrainable(self, windowSize):
         record = SeqIO.read(self.filePath, "embl")
         print(dir(record))
@@ -47,6 +51,48 @@ class sequenceReaderDecoder():
             ansStr += '\n'
             f.write(ansStr)
         f.close()
+    def ReadBioSeqAndTransformToTrainableWithoutSaving(self,windowSize):
+        record = SeqIO.read(self.filePath, "embl")
+        #print(dir(record))
+        #print(record.features)
+        cleavageloc = []
+        for i in range(2,len(record.features)):
+            #print (i.qualifiers)
+            a = record.features[i].location.start
+            #print(a)
+            cleavageloc.append(a)
+            ##print(i.location.extract(record.seq))
+        if(len(cleavageloc) > 9):
+            cleavageloc = cleavageloc[ :9]
+        a = np.array(record.seq)
+        a2 = [self.aminoacids[i] for i in a]
+        startPosition = 0
+        endPosition = windowSize
+        endArray = []
+        cont = 1
+        for i in range(0,len(a2)-windowSize):
+            if(i-5 in cleavageloc):
+                #print(True)
+                subArray = [cont, a2[startPosition:endPosition]]
+                startPosition = startPosition+1
+                endPosition = endPosition+1
+                endArray.append(subArray)
+                cont = cont + 1
+            else:    
+                subArray = [0,a2[startPosition:endPosition]]
+                startPosition = startPosition+1
+                endPosition = endPosition+1
+                endArray.append(subArray)
+        #print(endArray)
+        ansArray = []
+        ansStr= ''
+        for i in endArray:
+            ansStr = str(i[0])+' '
+            for j in i[1]:
+                ansStr += str(j)+' '
+            ansStr += '\n'
+            ansArray.append(ansStr)
+        return ansArray    
     def ReadBioSeqAndTransformToEvaluable(self, windowsSize):
         record = SeqIO.read(self.filePath, "embl")
         a = np.array(record.seq)
@@ -70,7 +116,164 @@ class sequenceReaderDecoder():
             #print(ansStr)
             f.write(ansStr)
         f.close()
+class TestTrainSetter():
+    def __init__(self, directoryEMBLfiles, directoryTestTrain):
+        self.directoryEMBLfiles = directoryEMBLfiles
+        self.directoryTestTrain = directoryTestTrain
+    def readFilesAndTransformLocally(self):
+        reader = sequenceReaderDecoder('','')
+        allFiles = []
+        for filename in os.listdir(self.directoryEMBLfiles):
+            if filename.endswith(".embl"):
+                reader.setFilePath(self.directoryEMBLfiles +'/'+ filename)
+                allFiles.append(reader.ReadBioSeqAndTransformToTrainableWithoutSaving(11))
+        return allFiles
+    def convertToUsable(self):
+        fullArray = self.readFilesAndTransformLocally()
+        test = []
+        for j in fullArray:
+            for i in j:
+                aux = i [ : len(i) - 2]
+                ans1 = aux.split(' ')
+                a2 = [int(i) for i in ans1]
+                #print(a2)
+                test.append(a2)
+        return test
+    def splitPositiveFromNegative(self):
+        complete = self.convertToUsable()
+        pos = []
+        neg = []
+        for i in complete :
+            if (i[0] == 0):
+                neg.append(i)
+            else:
+                pos.append(i)
+        return(pos,neg)
+    def splitAndSafe(self):
+        pos,neg = self.splitPositiveFromNegative()
+        one = []
+        two = []
+        three = []
+        four = []
+        five = []
+        six = []
+        seven = []
+        eight = []
+        nine = []
+        for i in pos :
+            if (i[0] == 1):
+                one.append(i)
+            if (i[0] == 2):
+                two.append(i)
+            if (i[0] == 3):
+                three.append(i)
+            if (i[0] == 4):
+                four.append(i)
+            if (i[0] == 5):
+                five.append(i)
+            if (i[0] == 6):
+                six.append(i)
+            if (i[0] == 7):
+                seven.append(i)
+            if (i[0] == 8):
+                eight.append(i)
+            if (i[0] == 9):
+                nine.append(i)
+        f1 = open(self.directoryTestTrain+'/testPost1', 'w+')
+        for i in one:
+            ansStr = ''
+            for j in i :
+                ansStr += str(j) + ' '
+            ansStr += '\n'
+            f1.write(ansStr)  
+        f1.close()
+        f2 = open(self.directoryTestTrain+'/testPost2', 'w+')
+        for i in two:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f2.write(ansStr)
+        f2.close()
+        
+        f3 = open(self.directoryTestTrain+'/testPost3', 'w+')
+        for i in three:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f3.write(ansStr)
+        f3.close()
 
+        f4 = open(self.directoryTestTrain+'/testPost4', 'w+')
+        for i in four:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f4.write(ansStr)
+        f4.close()
+
+        f5 = open(self.directoryTestTrain+'/testPost5', 'w+')
+        for i in five:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f5.write(ansStr)
+        f5.close()    
+
+        f6 = open(self.directoryTestTrain+'/testPost6', 'w+')
+        for i in six:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f6.write(ansStr)
+        f6.close()
+
+        f7 = open(self.directoryTestTrain+'/testPost7', 'w+')
+        for i in seven:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f7.write(ansStr)
+        f7.close()
+
+        f8 = open(self.directoryTestTrain+'/testPost8', 'w+')
+        for i in eight:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f8.write(ansStr)
+        f8.close()
+
+        f9 = open(self.directoryTestTrain+'/testPost9', 'w+')
+        for i in nine:
+            ansStr = str(1) + ' '
+            for j in range(1,len(i)) :
+                ansStr += str(i[j]) + ' '
+            ansStr += '\n'
+            f9.write(ansStr)
+        f9.close()   
+
+        ninth = len(neg)//9
+        for i in range(0,9):
+            f = open(self.directoryTestTrain + '/trestneg'+str(i+1), 'w+')
+            partition = neg [i*ninth : (i*ninth)+ninth]
+            for i in partition:
+                ansStr = ''
+                for j in i :
+                    ansStr += str(j) + ' '
+                ansStr += '\n'
+                f.write(ansStr)  
+            f.close()
+
+        #ReadBioSeqAndTransformToTrainableWithoutSaving
 #newobj = sequenceReaderDecoder('ab079887.embl','ab079887.SAMPLE')
 #newobj.ReadBioSeqAndTransformToTrainable(11)
 #newobj.ReadBioSeqAndTransformToEvaluable(11)
+newobj = TestTrainSetter('./embl', './trainables')
+newobj.splitAndSafe()
