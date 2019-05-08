@@ -16,9 +16,7 @@ def bringDataFromArchive(nameOfArchive):
 			labels.append([1,0])
 		else:
 			labels.append([0,1])
-		
 		featureStep = []
-	
 		d = i.split(' ');
 		d = d [2 :]
 		for j in d:
@@ -30,6 +28,61 @@ def bringDataFromArchive(nameOfArchive):
 	for i in range(0,len(labels)):
 		res.append([labels[i],features[i]])
 	return res
+
+def trueCreateFeatureVector(positive, negative):
+	dataToTrain = []
+	dataToTest = []
+	auxP = bringDataFromArchive(positive)
+	f = bringDataFromArchive(negative)
+	f = f[int(len(f)*0.99) : ]
+	postrain = auxP[int(len(auxP)  * 0.2) :]
+	negtrain = f[int(len(f) * 0.2) :]
+	dataToTrain += postrain
+	dataToTrain += negtrain
+	postest = auxP[ : int(len(auxP)  * 0.2)] 
+	negtest = f[ : int(len(f) * 0.2) ]
+	dataToTest += postest
+	dataToTest += negtest
+
+	trainX = []
+	trainY = []
+	testX = []
+	testY = []
+	ValX = []
+	ValY = []
+
+	train = dataToTrain[int(len(dataToTrain)*0.2) :]
+	val = dataToTrain[ : int(len(dataToTrain)*0.2)]
+
+	for i in train :
+		c = i[0]
+		d = i[1]
+		#d = d.reshape(len(i[1]),1)
+		trainY.append(c)
+		trainX.append(d)
+	for i in val :
+		c = i[0]
+		d = i[1]
+		#d = d.reshape(len(i[1]),1)
+		ValY.append(c)
+		ValX.append(d)
+	test = dataToTest
+	random.shuffle(test)
+	for i in test :
+		c = i[0]
+		d = i[1]
+		#d = d.reshape(len(i[1]),1)
+		testY.append(c)
+		testX.append(d)
+	trainY = np.array(trainY)
+	trainX = np.array(trainX)
+	testX = np.array(testX)
+	testY = np.array(testY)
+	ValX = np.array(ValX)
+	ValY = np.array(ValY)
+
+	return trainX,trainY,testX,testY,ValX,ValY
+
 
 def createFeatureVector (positive, negative,negt,post, size=0.2):
 	dataToProcess = []

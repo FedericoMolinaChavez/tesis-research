@@ -11,8 +11,9 @@ from keras.models import model_from_json
 from keras.models import load_model
 from automatic_model_loading import automatic_loading
 changer = sequenceReaderDecoder('./stuff/ab079887.embl','./stuff/ab079887.SAMPLE')
-changer.ReadBioSeqAndTransformToEvaluable(11)
+changer.ReadBioSeqAndTransformToEvaluable(10)
 testx =  bringDataFromArchive('./stuff/ab079887.SAMPLE')
+testx = testx[1:]
 # load json and create model
 
 models = automatic_loading()
@@ -20,12 +21,13 @@ models = automatic_loading()
 loaded_model = models[0] 
 
 
-a  = loaded_model.predict(testx, verbose=1, batch_size=4)
+'''a  = loaded_model.predict(testx, verbose=1, batch_size=4)
 a = np.argmax(a, axis=1)
 print(a)
 for i in a:
 	if(i == 0):
 		print(True)
+changer.ReadBioSeqAndTransformToEvaluable(9)'''
 b = models[1].predict(testx, verbose=1, batch_size=4)
 b = np.argmax(b, axis=1)
 print(b)
@@ -34,6 +36,7 @@ for i in b:
 	if(i == 0):
 		cont = cont+1
 print(cont)
+'''
 c = models[2].predict(testx, verbose=1, batch_size=4)
 c = np.argmax(c,axis=1)
 cont = 0
@@ -50,7 +53,7 @@ for i in d:
 	if(i == 0):
 		cont = cont+1
 print(cont)
-'''results = []
+results = []
 one = np.array([0,1])
 zero = np.array([1,0])
 for i in testy:

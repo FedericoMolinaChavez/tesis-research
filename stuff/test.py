@@ -26,12 +26,13 @@ class sequenceReaderDecoder():
             ##print(i.location.extract(record.seq))
         a = np.array(record.seq)
         a2 = [self.aminoacids[i] for i in a]
+        #print(a2)
         startPosition = 0
         endPosition = windowSize
         endArray = []
-        for i in range(0,len(a2)-windowSize):
+        for i in range(0,len(a2)-(windowSize)):
             if(i-5 in cleavageloc):
-                print(True)
+                #print(True)
                 subArray = [1, a2[startPosition:endPosition]]
                 startPosition = startPosition+1
                 endPosition = endPosition+1
@@ -51,7 +52,39 @@ class sequenceReaderDecoder():
             ansStr += '\n'
             f.write(ansStr)
         f.close()
-    def ReadBioSeqAndTransformToTrainableWithoutSaving(self,windowSize):
+    def InverseTransform(self, filePath, windowSize):
+        self.aminoacids = { 0 : "G" , 1 : "P", 2 : "A",  3 : "V",  4 : "L", 5 : "I" ,6 : "M",7 : "C",8 : "F",9 : "Y",10 : "W",11 : "H",12 : "K",13 : "R",14 : "Q",15 : "N",16 : "E",17 : "D",18 : "S",19 : "T"}
+        f = open(filePath)
+        test = []
+        contentInArchive = f.readlines()
+        for i in contentInArchive:
+           aux = i [ : len(i) - 2]
+           ans1 = aux.split(' ')
+           a2 = [int(i) for i in ans1]
+           a2 = a2[1 :]
+           #print(a2)
+           test.append(a2)
+        fullArray = []
+        for i in test[0]:
+            fullArray.append(i)
+        for i in range(1, len(test)):
+            a = test[i][8]
+            fullArray.append(a)
+        a2 = [self.aminoacids[i] for i in fullArray]
+        record = SeqIO.read(self.filePath, "embl")
+        aOriginal = np.array(record.seq)
+        #print(len(a2))
+        #print(len(aOriginal))
+        #print(aOriginal)
+        for i in range(0, len(a2)):
+            if(a2[i] != aOriginal[i]):
+               print(a2[i])
+               print(' ')
+               print(aOriginal[i])
+        print('es igual')
+
+       
+    def ReadBioSeqAndTransformToTrainableWithoutSaving(self, windowSize):
         record = SeqIO.read(self.filePath, "embl")
         #print(dir(record))
         #print(record.features)
@@ -273,7 +306,8 @@ class TestTrainSetter():
 
         #ReadBioSeqAndTransformToTrainableWithoutSaving
 #newobj = sequenceReaderDecoder('ab079887.embl','ab079887.SAMPLE')
-#newobj.ReadBioSeqAndTransformToTrainable(11)
+#newobj.ReadBioSeqAndTransformToTrainable(9)
 #newobj.ReadBioSeqAndTransformToEvaluable(11)
-newobj = TestTrainSetter('./embl', './trainables')
-newobj.splitAndSafe()
+#newobj = TestTrainSetter('./embl', './trainables')
+#newobj.splitAndSafe()
+#newobj.InverseTransform('ab079887.SAMPLE', 9)

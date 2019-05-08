@@ -1,4 +1,4 @@
-from preprocessing import createFeatureVector
+from preprocessing import trueCreateFeatureVector
 import tensorflow as tf
 from keras.models import Sequential
 from keras import optimizers
@@ -14,7 +14,7 @@ sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
 
-trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S2_6_5_HMM.sample','./database/Train_Negative_Sample_S2_6_5_1_HMM.sample', './database/Test_Positive_Sample_S2_6_5_HMM.sample', './database/Test_Negative_Sample_S2_6_5_1_HMM.sample')
+trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./stuff/trainables/testPost1','./stuff/trainables/trestneg1')
 
 print(trainx.shape)
 model = Sequential()
@@ -27,7 +27,7 @@ model.add(Dense(2,activation='softmax', bias_initializer='RandomNormal'))
 optimizerx = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 model.compile(loss = 'poisson', optimizer = optimizerx,metrics=['accuracy'])
 print(model.summary())
-model.fit(trainx,trainy, batch_size=32, epochs=1000,verbose=5)
+model.fit(trainx,trainy, batch_size=32, epochs=15,verbose=5)
 
 model_json = model.to_json()
 with open("models/model2.json","w") as json_file:
