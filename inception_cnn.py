@@ -3,18 +3,17 @@ from keras.layers import MaxPooling1D
 from keras.layers import Dense, Embedding, MaxPool1D, Flatten
 import numpy as np 
 import analisisResults
-from preprocessing import createFeatureVector
+from preprocessing import trueCreateFeatureVector
 from keras.models import Model
 from keras.layers import Input
 from keras.optimizers import SGD
 import keras
 from keras.utils import np_utils
 
-trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S1_3_8_HMM.sample','./database/Train_Negative_Sample_S1_3_8_1_HMM.sample',"./database/Test_Negative_Sample_S1_3_8_1_HMM.sample","./database/Test_Positive_Sample_S1_3_8_HMM.sample")
-#print(trainx.shape[0])
+trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./stuff/trainables/testPost9','./stuff/trainables/trestneg9')
 a = Input(shape = (trainx.shape[1],))
 print(a)
-input_c = Embedding(30, 128, input_length = trainx.shape[1])(a)
+input_c = Embedding(20, 128, input_length = trainx.shape[1])(a)
 #a = Input(shape = (trainx.shape[0],trainx.shape[1],3))
 
 tower_1 = Conv1D(64, 1, padding='same', activation='relu')(input_c)
@@ -34,18 +33,18 @@ model = Model(inputs = a, outputs = out)
 
 model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
 print(model.summary())
-model.fit(trainx,trainy, batch_size=32, epochs=10,verbose=5)
+model.fit(trainx,trainy, batch_size=32, epochs=20,verbose=5)
 model_json = model.to_json()
-with open("models/model1.json","w") as json_file:
+with open("models/model9.json","w") as json_file:
 	json_file.write(model_json)
-model.save_weights("models/model1.h5")
+model.save_weights("models/model9.h5")
 score,acc = model.evaluate(Valx,Valy,verbose=2,batch_size=4)
 print("Logloss score : %.2f" % (score))
 print("Validation set accuracy: %.2f" % (acc))
 
 r  = model.predict(Valx, verbose=1, batch_size=4)
 r = np.argmax(r, axis=1)
-print(r)
+#print(r)
 results = []
 one = np.array([0,1])
 zero = np.array([1,0])

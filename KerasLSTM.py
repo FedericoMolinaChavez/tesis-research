@@ -14,11 +14,11 @@ sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
 
-trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./stuff/trainables/testPost1','./stuff/trainables/trestneg1')
+trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./stuff/trainables/testPost9','./stuff/trainables/trestneg9')
 
 print(trainx.shape)
 model = Sequential()
-model.add(Embedding(30, 128, input_length = trainx.shape[1]))
+model.add(Embedding(20, 128, input_length = trainx.shape[1]))
 model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
 model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
 model.add(LSTM(500, dropout = 0.2, recurrent_dropout=0.3, return_sequences = True, unroll = True,recurrent_activation='hard_sigmoid',bias_initializer='RandomNormal',implementation=1))
@@ -27,12 +27,12 @@ model.add(Dense(2,activation='softmax', bias_initializer='RandomNormal'))
 optimizerx = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 model.compile(loss = 'poisson', optimizer = optimizerx,metrics=['accuracy'])
 print(model.summary())
-model.fit(trainx,trainy, batch_size=32, epochs=15,verbose=5)
+model.fit(trainx,trainy, batch_size=32, epochs=20, verbose=5)
 
 model_json = model.to_json()
-with open("models/model2.json","w") as json_file:
+with open("models/model9.json","w") as json_file:
 	json_file.write(model_json)
-model.save_weights("models/model2.h5")
+model.save_weights("models/model9.h5")
 
 score,acc = model.evaluate(Valx,Valy,verbose=2,batch_size=4)
 print("Logloss score : %.2f" % (score))

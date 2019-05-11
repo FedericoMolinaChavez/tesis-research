@@ -39,10 +39,12 @@ def trueCreateFeatureVector(positive, negative):
 	negtrain = f[int(len(f) * 0.2) :]
 	dataToTrain += postrain
 	dataToTrain += negtrain
+	random.shuffle(dataToTrain)
 	postest = auxP[ : int(len(auxP)  * 0.2)] 
 	negtest = f[ : int(len(f) * 0.2) ]
 	dataToTest += postest
 	dataToTest += negtest
+	random.shuffle(dataToTest)
 
 	trainX = []
 	trainY = []
@@ -74,6 +76,7 @@ def trueCreateFeatureVector(positive, negative):
 		#d = d.reshape(len(i[1]),1)
 		testY.append(c)
 		testX.append(d)
+	#print(trainY)
 	trainY = np.array(trainY)
 	trainX = np.array(trainX)
 	testX = np.array(testX)

@@ -1,4 +1,4 @@
-from preprocessing import createFeatureVector
+from preprocessing import trueCreateFeatureVector
 import tensorflow as tf
 from keras.models import Sequential
 from keras import optimizers
@@ -13,7 +13,7 @@ sess = tf.Session(config=config)
 keras.backend.set_session(sess)
 
 
-trainx,trainy,testx,testy,Valx,Valy =  createFeatureVector('./database/Train_Positive_Sample_S9_2_9_HMM.sample','./database/Train_Negative_Sample_S9_2_9_1_HMM.sample')
+trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./stuff/trainables/testPost9','./stuff/trainables/trestneg9')
 
 print(trainx.shape)
 

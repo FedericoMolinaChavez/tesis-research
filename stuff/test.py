@@ -31,7 +31,7 @@ class sequenceReaderDecoder():
         endPosition = windowSize
         endArray = []
         for i in range(0,len(a2)-(windowSize)):
-            if(i-5 in cleavageloc):
+            if(i-(windowSize//2) in cleavageloc):
                 #print(True)
                 subArray = [1, a2[startPosition:endPosition]]
                 startPosition = startPosition+1
