@@ -1,20 +1,19 @@
 from preprocessing import trueCreateFeatureVector
 import tensorflow as tf
-from keras.models import Sequential
-from keras import optimizers
-from keras.layers import Dense, Embedding, LSTM
+from tensorflow.keras.models import Sequential
+from tensorflow.keras import optimizers
+from tensorflow.keras.layers import Dense, Embedding, LSTM
 import numpy as np 
-import keras
-from keras.models import model_from_json
-from keras.models import load_model
+from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import load_model
 import analisisResults
-
+from tensorflow.keras import backend
 trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./trainables/testPost9','./trainables/trestneg9')
-config = tf.ConfigProto( device_count = {'GPU': 1} ) 
+config = tf.ConfigProto( device_count = {'GPU': 0} ) 
 sess = tf.Session(config=config) 
-keras.backend.set_session(sess)
+backend.set_session(sess)
 class LSTMdef():
-    def __init__(self, numLayers, numCells, drop, recurrDrop, recurrActivation, optim, loss, batch, learningRate, amsgrad):
+    def __init__(self, numLayers, numCells, drop, recurrDrop, recurrActivation, optim, loss, batch, learningRate, amsgrad,epochs):
         self.numLayers = numLayers
         self.numCells = numCells
         self.drop = drop
@@ -25,6 +24,7 @@ class LSTMdef():
         self.batch = batch
         self.learningRate = learningRate
         self.amsgrad = amsgrad
+        self.epochs = epochs
         self.model = Sequential()
     def generate(self):
         print(trainx.shape[1])
@@ -40,23 +40,24 @@ class LSTMdef():
             optimizerx = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=True)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
         if(self.optim == 'SGD'):
-            optimizerx = optimizers.SGD(learning_rate=0.01, momentum=0.0, nesterov=False)
+            optimizerx = optimizers.SGD(lr=0.01, momentum=0.0, nesterov=False)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
         if(self.optim == 'adagrad'):
-            optimizerx = optimizers.Adagrad(learning_rate=0.01)
+            optimizerx = optimizers.Adagrad(lr=0.01)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
         if(self.optim == 'RMSprop'):
-            optimizerx = optimizers.RMSprop(learning_rate=0.001, rho=0.9)
+            optimizerx = optimizers.RMSprop(lr=0.001, rho=0.9)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
         if(self.optim == 'Adamax'):
-            optimizerx = optimizers.Adamax(learning_rate=0.002, beta_1=0.9, beta_2=0.999)
+            optimizerx = optimizers.Adamax(lr=0.002, beta_1=0.9, beta_2=0.999)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
         if(self.optim == 'Nadam'):
-            optimizerx = optimizers.Nadam(learning_rate=0.002, beta_1=0.9, beta_2=0.999)
+            optimizerx = optimizers.Nadam(lr=0.002, beta_1=0.9, beta_2=0.999)
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
     def test(self):
         print(self.model.summary())
-        self.model.fit(trainx,trainy, batch_size=32, epochs=2, verbose=5)
+        print(trainx.shape[1])
+        self.model.fit(trainx,trainy, batch_size=32, epochs=self.epochs, verbose=5)
         score,acc = self.model.evaluate(Valx,Valy,verbose=2,batch_size=4)
         print("Logloss score : %.2f" % (score))
         print("Validation set accuracy: %.2f" % (acc))
