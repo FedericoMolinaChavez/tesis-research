@@ -1,0 +1,193 @@
+.Upload {
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  .Content {
+    margin: auto;
+    text-align:center;
+  }
+  
+  .formT{
+    margin: auto;
+    text-align:center;
+    margin-bottom: 40px;
+  }
+  
+  .TitleForm1{
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  .TitleForm2{
+    display: inline;
+    margin-right: 10px;
+    margin-left: 100px;
+  }
+  
+  .ValuesForm1{
+    margin-right: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 30px;
+    width: 192px;
+    display: inline;
+    background-color: #328db4;
+    color: white;
+    border: none;
+    text-decoration: none;
+    border-radius: 10px;
+  }
+  
+  .ValuesForm2{
+    margin-left: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 30px;
+    width: 192px;
+    display: inline;
+    background-color: #328db4;
+    color: white;
+    border: none;
+    text-decoration: none;
+    border-radius: 10px;
+  }
+  
+  
+  .ValueStart{
+    display: none;
+  }
+  
+  .Value1{
+    background-color: #B5B8BB;
+    border: none;
+  }
+  
+  .Value1:hover{
+    background-color: #AEB0B3;
+  }
+  
+  .UploadFiles{
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .Files {
+    margin-left: 32px;
+    align-items: flex-start;
+    justify-items: flex-start;
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .Actions {
+    margin: auto;
+    text-align:center;
+    margin-top: 32px;
+  }
+  
+  .Title {
+    margin-bottom: 32px;
+    color: #555;
+  }
+  
+  .Filename {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .Row {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50px;
+    padding: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .CheckIcon {
+    opacity: 0.5;
+    margin-left: 32px;
+  }
+  
+  .ProgressWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .button1{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background: #328db4;
+  }
+  
+  .button1:hover{
+    background: #CACBCD;
+  }
+  
+  .button2{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background: #328db4;
+  }
+  
+  .button2NoPremium{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background: #BDC3C7;
+  }
+  
+  .button3{
+    background: #328db4;
+  }
+  
+  button {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    display: inline-block;
+    height: 36px;
+    min-width: 88px;
+    padding: 6px 16px;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 0;
+    border-radius: 2px;
+    background: rgba(103, 58, 183, 1);
+    color: #fff;
+    outline: 0;
+  }
+  
+  button:disabled {
+    background: rgb(189, 189, 189);
+    cursor: default;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .ValuesForm1{
+      margin-bottom: 20px;
+    }
+    .ValuesForm2{
+      margin: 0px;
+    }
+  }
+  
