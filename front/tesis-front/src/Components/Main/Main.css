@@ -1,0 +1,9 @@
+.global {
+    font-family: 'Montserrat', sans-serif;
+}
+.centering{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
