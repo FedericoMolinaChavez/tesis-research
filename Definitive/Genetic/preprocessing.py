@@ -17,11 +17,11 @@ def bringDataFromArchive(nameOfArchive):
 		else:
 			labels.append([0,1])
 		featureStep = []
-		d = i.split(' ');
+		d = i.split(' ')
 		d = d [2 :]
 		for j in d:
 			if(j != '' and j != '\n'):
-				featureStep.append(int(j))
+				featureStep.append(int(j)+1)
 		features.append(featureStep)
 		featureStep = []
 	res = []	
@@ -39,12 +39,12 @@ def trueCreateFeatureVector(positive, negative):
 	negtrain = f[int(len(f) * 0.2) :]
 	dataToTrain += postrain
 	dataToTrain += negtrain
-	random.shuffle(dataToTrain)
+	
 	postest = auxP[ : int(len(auxP)  * 0.2)] 
 	negtest = f[ : int(len(f) * 0.2) ]
 	dataToTest += postest
 	dataToTest += negtest
-	random.shuffle(dataToTest)
+
 
 	trainX = []
 	trainY = []

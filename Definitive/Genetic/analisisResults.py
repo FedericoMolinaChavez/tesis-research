@@ -9,71 +9,71 @@ class analisisResults :
 	arregloResultadosObtenidos = []
 	arregloResultadosEsperados = []
 
-	def __init__ (Self , val1 , val2 ) :
-		Self.arregloResultadosObtenidos = val1 
-		Self.arregloResultadosEsperados = val2
+	def __init__ (self , val1 , val2 ) :
+		self.arregloResultadosObtenidos = val1 
+		self.arregloResultadosEsperados = val2
 
-	def testAccuracy (Self) :
+	def testAccuracy (self) :
 		possitiveCases = 0
-		for i in range(0 , len(Self.arregloResultadosEsperados)) :
-			if (Self.arregloResultadosObtenidos [i] == Self.arregloResultadosEsperados[i]) :
+		for i in range(0 , len(self.arregloResultadosEsperados)) :
+			if (self.arregloResultadosObtenidos [i] == self.arregloResultadosEsperados[i]) :
 				possitiveCases += 1
-		accuracy = possitiveCases / len(Self.arregloResultadosEsperados) * 100
+		accuracy = possitiveCases / len(self.arregloResultadosEsperados)
 		return accuracy
-	def testPresicion (Self) :
+	def testPresicion (self) :
 		falsPossitive = 0
 		truePossitive = 0
 		pres = 0
-		for i in range (len(Self.arregloResultadosEsperados)) :
-			if (Self.arregloResultadosObtenidos[i] == 1 and Self.arregloResultadosEsperados[i] == 0) :
+		for i in range (len(self.arregloResultadosEsperados)) :
+			if (self.arregloResultadosObtenidos[i] == 1 and self.arregloResultadosEsperados[i] == 0) :
 				falsPossitive += 1
-			if (Self.arregloResultadosObtenidos[i] == 0 and Self.arregloResultadosEsperados[i] == 1) :
+			if (self.arregloResultadosObtenidos[i] == 0 and self.arregloResultadosEsperados[i] == 1) :
 				falsPossitive += 1
-			if (Self.arregloResultadosEsperados[i] == Self.arregloResultadosEsperados[i]) :
+			if (self.arregloResultadosEsperados[i] == self.arregloResultadosEsperados[i]) :
 				truePossitive += 1
 		#print(truePossitive)
 		#print(falsPossitive)
 		if(truePossitive > 0) :
-			pres = (truePossitive/(truePossitive+falsPossitive))*100
+			pres = (truePossitive/(truePossitive+falsPossitive))
 		return pres
 
 	
-	def testSpecificity (Self) :
+	def testSpecificity (self) :
 		truePos = 0
 		FalseNegative = 0
-		for i in range (len(Self.arregloResultadosEsperados)) :
-			if (Self.arregloResultadosEsperados[i] == 1 and Self.arregloResultadosObtenidos[i]==1) :
+		for i in range (len(self.arregloResultadosEsperados)) :
+			if (self.arregloResultadosEsperados[i] == 1 and self.arregloResultadosObtenidos[i]==1) :
 				#print ("T")
 				truePos += 1
-			if (Self.arregloResultadosEsperados[i] == 1 and Self.arregloResultadosObtenidos[i]==0) :
+			if (self.arregloResultadosEsperados[i] == 1 and self.arregloResultadosObtenidos[i]==0) :
 				FalseNegative += 1
-		Sensitivity = truePos/(truePos + FalseNegative)*100
+		Sensitivity = truePos/(truePos + FalseNegative)
 
 		return Sensitivity
-	def testSensitivity (Self) :
+	def testSensitivity (self) :
 		trueNeg = 0
 		falseNeg = 0
-		for i in range (len(Self.arregloResultadosEsperados)) :
-			if (Self.arregloResultadosEsperados[i] == 0 and Self.arregloResultadosObtenidos[i]==0) :
+		for i in range (len(self.arregloResultadosEsperados)) :
+			if (self.arregloResultadosEsperados[i] == 0 and self.arregloResultadosObtenidos[i]==0) :
 				trueNeg += 1
-			if (Self.arregloResultadosEsperados[i] == 0 and Self.arregloResultadosObtenidos[i]==1) :
+			if (self.arregloResultadosEsperados[i] == 0 and self.arregloResultadosObtenidos[i]==1) :
 				falseNeg += 1
-		Specificity = trueNeg/(trueNeg+falseNeg)*100
+		Specificity = trueNeg/(trueNeg+falseNeg)
 		return Specificity
-	def MattCorr (Self) :
+	def MattCorr (self) :
 		trueNeg = 0
 		truePos = 0
 		falsNeg = 0
 		falsPos = 0
-		for i in range (len(Self.arregloResultadosEsperados)) :
-			if (Self.arregloResultadosEsperados[i] == 0 and Self.arregloResultadosObtenidos[i]==0) :
+		for i in range (len(self.arregloResultadosEsperados)) :
+			if (self.arregloResultadosEsperados[i] == 0 and self.arregloResultadosObtenidos[i]==0) :
 				trueNeg += 1
-			if (Self.arregloResultadosEsperados[i] == 0 and Self.arregloResultadosObtenidos[i]==1) :
+			if (self.arregloResultadosEsperados[i] == 0 and self.arregloResultadosObtenidos[i]==1) :
 				falsNeg += 1
-			if (Self.arregloResultadosEsperados[i] == 1 and Self.arregloResultadosObtenidos[i]==1) :
+			if (self.arregloResultadosEsperados[i] == 1 and self.arregloResultadosObtenidos[i]==1) :
 				#print ("T")
 				truePos += 1
-			if (Self.arregloResultadosObtenidos[i] == 1 and Self.arregloResultadosEsperados[i] == 0) :
+			if (self.arregloResultadosObtenidos[i] == 1 and self.arregloResultadosEsperados[i] == 0) :
 				falsPos += 1
 		MCC = (truePos*trueNeg - falsPos*falsNeg)/(math.sqrt((truePos+falsPos)*(truePos+falsNeg)*(trueNeg+falsPos)*(trueNeg+falsNeg)))
-		return MCC*100
+		return MCC

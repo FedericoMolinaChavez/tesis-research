@@ -17,6 +17,8 @@ def evaluateModel(operations,metrics):
     specificity = resl.testSpecificity()
     mattcorr = resl.MattCorr()
     f1 = 2*((presicion*sensitivity)/(sensitivity+presicion))
+    with open("resl.csv", "a") as f:
+        f.write(str(operations[0])+','+str(operations[1])+','+str(operations[2])+','+str(operations[3])+','+str(operations[4])+','+str(operations[5])+','+str(operations[6])+','+str(operations[7])+','+str(operations[8])+','+str(operations[9])+','+str(operations[10])+','+str(accuracy)+','+str(presicion)+','+str(sensitivity)+','+str(specificity)+','+str(mattcorr)+','+str(f1)+'\n')
     return[accuracy,presicion,sensitivity,specificity,mattcorr,f1]
 
 class DeepGen(object):
@@ -25,8 +27,10 @@ class DeepGen(object):
         self.rules = par.readFile()
         self.Operators = []
         self.pop = []
-        self.quantity = 2
-        self.metrics = [0.5,0.5,0.5,0.5,0.5,0.5]
+        self.quantity = 10
+        self.metrics = [0.5,0.5,0,0.5,0,0.5]
+        with open("resl.csv","w") as f:
+            f.write("rangeL"+','+"rangeC"+','+"dropC"+','+"rdropC"+','+"react"+','+"optim"+','+"loss"+','+"batchC"+','+"learningCh"+','+"amsgrad"+','+"epochC"+','+"accuracy"+','+"presicion"+','+"sensitivity"+','+"specificity"+','+"mattcorr"+','+"f1"+'\n')
     def generateInitial(self):
         lstmR = self.rules['rangeLayLstm']
         celR = self.rules['rangeLstm']
@@ -66,7 +70,7 @@ class DeepGen(object):
         aux = []
         for i in self.pop:
             ans.append(i.evaluate(self.metrics))
-        for i in range(0,len(ans)-1):
+        for i in range(0,len(ans)):
             if(ans[i]>0.5):
                 aux.append(self.pop[i])
             if(ans[i]==0.5):
@@ -120,13 +124,13 @@ class DeepGen(object):
                     learningCh = random.uniform(float(learningRater[0]),float(learningRater[1]))
                     i.operations[8] = learningCh
                 if(chooser == 11):
-                    epochC = math.ceil(random.randrange(int(epochr[0],int(epochr[1]))))
+                    epochC = math.ceil(random.randrange(int(epochr[0]),int(epochr[1])))
                     i.operations[11] = epochC
     def cross(self):
-            aux = []
-            for j in range(0,len(self.pop)-2):
+            for j in range(0,len(self.pop)-1):
+                aux = []
                 aux.append(self.pop[j].getOperations()[0:5]+self.pop[j+1].getOperations()[6:10])
-            self.pop = aux
+                self.pop[j].operations = aux
     def new_gen(self):
         lstmR = self.rules['rangeLayLstm']
         celR = self.rules['rangeLstm']
@@ -139,7 +143,8 @@ class DeepGen(object):
         rdropR = self.rules['rdrop']
         epochr = self.rules['epochs']
         actual = len(self.pop)
-        needed = actual-self.quantity
+        needed = self.quantity - actual
+        print(needed)
         for i in range(0,needed):
             ind = individual(self.metrics)
             rangeL = math.ceil(random.randrange(int(lstmR[0]),int(lstmR[1])))         
@@ -153,7 +158,7 @@ class DeepGen(object):
             batchC = math.ceil(random.randrange(int(batchR[0]),int(batchR[1])))
             dropC = random.uniform(float(dropR[0]),float(dropR[1]))
             rdropC = random.uniform(float(rdropR[0]),float(rdropR[1]))
-            epochC = math.ceil(random.randrange(int(epochr[0],int(epochr[1]))))
+            epochC = math.ceil(random.randrange(int(epochr[0]),int(epochr[1])))
             amsgrad = False
             if(optim == 'adam'):
                 prob = random.random()
@@ -165,22 +170,42 @@ class DeepGen(object):
             self.pop.append(ind)
     def genetic(self):
         self.generateInitial()
-        self.evaluation()
-        self.cross()
-        self.mutation()
-        self.new_gen()
+        generation = 1
+        while sum(self.metrics)<4.75:
+            print("generation : "+str(generation))
+            self.evaluation()
+            self.medEstablish()
+            self.cross()
+            self.mutation()
+            self.new_gen()
+            generation = generation + 1
+    def medEstablish(self):
+        vals = []
+        num = len(self.pop)
+        print(num)
+        for i in self.pop:
+            if(vals != []):
+                #print(i.getMetrics())
+                vals[0] = [vals[0][0]+i.getMetrics()[0],vals[0][1]+i.getMetrics()[1],vals[0][2]+i.getMetrics()[2],vals[0][3]+i.getMetrics()[3],vals[0][4]+i.getMetrics()[4],vals[0][5]+i.getMetrics()[5] ]
+            else:
+                #print(i.getMetrics())
+                vals.append(i.getMetrics())
+        print(vals)
+        meds = [vals[0][0]/num,vals[0][1]/num,vals[0][2]/num,vals[0][3]/num,vals[0][4]/num,vals[0][5]/num] 
+        self.metrics = meds
 
 
 
 class individual(object):
     def __init__(self, metrics):
         self.Operations = []
-        self.Metrics = []
+        self.Metrics = metrics
         self.testTrain = []
         self.lstmd = None
-        self.metrics = metrics 
+        self.metrics = [] 
     def evaluate(self,metrics):
         self.metrics = evaluateModel(self.Operations,metrics)
+        #print(self.metrics)
         total = self.metrics[0]+self.metrics[1]+self.metrics[2]+self.metrics[3]+self.metrics[4]+self.metrics[5]
         med = sum(metrics)
         if(total > med):
@@ -192,7 +217,7 @@ class individual(object):
     def fillOperations(self, operations):
         self.Operations = operations
     def getMetrics(self):
-        return self.Metrics
+        return self.metrics
     def getOperations(self):
         return self.Operations
 

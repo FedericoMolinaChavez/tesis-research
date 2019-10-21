@@ -8,8 +8,8 @@ from tensorflow.keras.models import model_from_json
 from tensorflow.keras.models import load_model
 import analisisResults
 from tensorflow.keras import backend
-trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./trainables/testPost9','./trainables/trestneg9')
-config = tf.ConfigProto( device_count = {'GPU': 0} ) 
+trainx,trainy,testx,testy,Valx,Valy =  trueCreateFeatureVector('./trainables/testPost1','./trainables/trestneg1')
+config = tf.ConfigProto( device_count = {'GPU': 1} ) 
 sess = tf.Session(config=config) 
 backend.set_session(sess)
 class LSTMdef():
@@ -56,13 +56,13 @@ class LSTMdef():
             self.model.compile(loss = self.loss, optimizer = optimizerx,metrics=['accuracy'])
     def test(self):
         print(self.model.summary())
-        print(trainx.shape[1])
+        #print(trainx.shape[1])
         self.model.fit(trainx,trainy, batch_size=32, epochs=self.epochs, verbose=5)
         score,acc = self.model.evaluate(Valx,Valy,verbose=2,batch_size=4)
-        print("Logloss score : %.2f" % (score))
-        print("Validation set accuracy: %.2f" % (acc))
+        #print("Logloss score : %.2f" % (score))
+        #print("Validation set accuracy: %.2f" % (acc))
         a = self.model.predict_classes(testx, verbose=1, batch_size=4)
-        print(a)
+        #print(a)
         results = []
         one = np.array([0,1])
         zero = np.array([1,0])
@@ -73,10 +73,10 @@ class LSTMdef():
             if (np.array_equal(i,zero)):
                 results.append(0)
         analisis = analisisResults.analisisResults(a,results)
-        print(analisis.testAccuracy())
-        print(analisis.testPresicion())
-        print(analisis.testSensitivity())
-        print(analisis.testSpecificity())
-        print(analisis.MattCorr())
-        print(2*((analisis.testPresicion()*analisis.testSensitivity())/(analisis.testSensitivity()+analisis.testPresicion())))
+        #print(analisis.testAccuracy())
+        #print(analisis.testPresicion())
+        #print(analisis.testSensitivity())
+        #print(analisis.testSpecificity())
+        #print(analisis.MattCorr())
+        #print(2*((analisis.testPresicion()*analisis.testSensitivity())/(analisis.testSensitivity()+analisis.testPresicion())))
         return(analisis)
